@@ -26,5 +26,18 @@
           (var-set nonce (+ (var-get nonce) u1))
           (ok random-number))))))
 
+;; Get the last generated random number
+(define-read-only (get-last-random-number)
+  (ok (var-get last-random-number)))
 
+;; Reset the nonce (only contract owner)
+(define-public (reset-nonce)
+  (begin
+    (asserts! (is-eq tx-sender CONTRACT_OWNER) ERR_NOT_AUTHORIZED)
+    (var-set nonce u0)
+    (ok true)))
+
+;; Get the current nonce
+(define-read-only (get-nonce)
+  (ok (var-get nonce)))
 
